@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class TeachersListActivity extends AppCompatActivity
 //    NavigationView navigationView = null;
 //    Toolbar toolbar = null;
 
+    Button bMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,15 @@ public class TeachersListActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
+        bMap = (Button)findViewById(R.id.getMap);
+        bMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

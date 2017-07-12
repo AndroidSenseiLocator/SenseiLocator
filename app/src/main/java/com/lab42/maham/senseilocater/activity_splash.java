@@ -36,6 +36,11 @@ public class activity_splash extends AppCompatActivity {
                 mProgressBar.setProgress(i);
                 Intent intent = new Intent(getApplication(),activity_go.class);
                 startActivity(intent);
+
+                Intent in = new Intent();
+                in.setAction("MyBroadcast");
+                in.putExtra("value",100);
+                sendBroadcast(in);
             }
         };
         mCountDownTimer.start();

@@ -127,4 +127,11 @@
         android:text="@string/std_profile_signup"
         android:id="@+id/btn_std_profile_signup"
         />
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_std_profile_signup"
+        android:id="@+id/lst"
+        >
+    </ListView>
 </RelativeLayout>

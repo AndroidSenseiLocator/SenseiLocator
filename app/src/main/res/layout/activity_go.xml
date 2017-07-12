@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/dummy1"
         android:layout_centerHorizontal="true"
-        android:text="@string/GO"
+        android:text="@string/GO1"
         android:paddingLeft="@dimen/go2_padding"
         android:paddingRight="@dimen/go2_padding"
         android:paddingTop="@dimen/go_padding"
@@ -37,6 +37,22 @@
         android:background="@color/blue"
         android:textColor="@color/white"
         android:textSize="@dimen/go_padding"
-        android:id="@+id/btn_go"
+        android:id="@+id/btn_go1"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_go1"
+        android:layout_centerHorizontal="true"
+        android:text="@string/GO2"
+        android:paddingLeft="@dimen/go2_padding"
+        android:paddingRight="@dimen/go2_padding"
+        android:paddingTop="@dimen/go_padding"
+        android:paddingBottom="@dimen/go_padding"
+        android:background="@color/blue"
+        android:layout_marginTop="@dimen/go2_margin_top"
+        android:textColor="@color/white"
+        android:textSize="@dimen/go_padding"
+        android:id="@+id/btn_go2"
         />
 </RelativeLayout>

@@ -19,6 +19,15 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-55dp"
+            android:layout_marginLeft="270dp"
+            android:text="Map"
+            android:id="@+id/getMap"
+            />
     </android.support.design.widget.AppBarLayout>
 
       <include layout="@layout/cotent_teachers_list" />

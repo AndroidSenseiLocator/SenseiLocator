@@ -33,9 +33,8 @@ public class activity_signup_menu extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        //Toast.makeText(getApplicationContext(),"end",Toast.LENGTH_SHORT).show();
-
-        //finish();
-        //System.exit(0);
+        moveTaskToBack(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
     }
 }

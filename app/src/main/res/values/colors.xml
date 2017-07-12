@@ -7,4 +7,8 @@
     <color name="white">#FFFFFF</color>
     <color name="app_backgroung">#5557B7</color>
     <color name="colorWhite">#faf8f8</color>
+
+
+    <color name="black">#030303</color>
+    <color name="grey">#605858</color>
 </resources>

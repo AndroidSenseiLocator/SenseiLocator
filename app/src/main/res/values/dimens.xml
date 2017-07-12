@@ -3,8 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="signup_menu_as">24dp</dimen>
-    <dimen name="go_padding">24dp</dimen>
-    <dimen name="go2_padding">90dp</dimen>
+    <dimen name="go_padding">22dp</dimen>
+    <dimen name="go2_padding">86dp</dimen>
+    <dimen name="go2_margin_top">8dp</dimen>
 
 
 
@@ -25,6 +26,7 @@
     <dimen name="seperator_large_margin">3dp</dimen>
 
 
+    <dimen name="in_list_img_size">50dip</dimen>
     <dimen name="img_size">150dp</dimen>
     <dimen name="margin">10dip</dimen>
     <dimen name="margin_top">10dip</dimen>

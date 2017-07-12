@@ -5,8 +5,9 @@
 
     <ImageView
         android:id="@+id/img_teacher_teacher_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/in_list_img_size"
+        android:layout_height="@dimen/in_list_img_size"
+        android:background="@drawable/button_shape"
         android:src="@drawable/anonymouspic"/>
     <TextView
         android:id="@+id/tv_cell_teacher_list"
@@ -16,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
+        android:layout_marginLeft="@dimen/margin_left"
         android:text="@string/user_name_teachers_list_activity"/>
     <ImageView
         android:id="@+id/img_status_teacher_list"

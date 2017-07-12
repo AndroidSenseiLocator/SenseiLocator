@@ -9,13 +9,14 @@
     <string name="std_profile_password_reEnter">Re_enter Password</string>
     <string name="std_profile_signup">Sign Up</string>
     <string name="teacher_profile_edu">Education</string>
-    <string name="GO">GO</string>
+    <string name="GO1">Sign In</string>
+    <string name="GO2">Sign Up</string>
     <string name="signup_menu_as">Sign Up AS:</string>
     <string name="signup_menu_as_teacher">Teacher</string>
     <string name="signup_menu_as_student">Student</string>
     <string name="title_activity_login">Sign in</string>
     <string name="log_out">Log Out</string>
-
+    <string name="password_hint_edit_profile"></string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -69,4 +70,10 @@
 
 
     <string name="teacher_profile_check_notify">Notify</string>
+
+
+    <string name="tv_loc">Location : </string>
+    <string name="tv_maxt">Max Temp : </string>
+    <string name="tv_mint">Min Temp : </string>
+    <string name="title_activity_maps">Map</string>
 </resources>

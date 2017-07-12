@@ -1,4 +1,4 @@
-package com.example.user.senseilocator.dummy;
+package com.lab42.maham.senseilocater.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

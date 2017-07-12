@@ -3,23 +3,23 @@ package com.lab42.maham.senseilocater;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,20 +29,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-/**
- * A login screen that offers login via email/password.
- */
 public class activity_login extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
+    private SharedPreferences sp;
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
@@ -62,6 +61,9 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private ArrayList<LogInBO> student = new ArrayList<LogInBO>();
+    private ArrayList<TeacherLogInBO> teachers = new ArrayList<TeacherLogInBO>();
+    private boolean statusFlag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,9 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        //mEmailView.getText();
         populateAutoComplete();
+
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -83,19 +87,88 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
             }
         });
 
+        UserLoginTask us=new UserLoginTask(mEmailView.getText().toString(),mPasswordView.getText().toString());
+        us.execute();
+        TeacherLoginTask te=new TeacherLoginTask(mEmailView.getText().toString(),mPasswordView.getText().toString());
+        te.execute();
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //attemptLogin();
-                int k = getIntent().getExtras().getInt("key");
-                Intent i;
-                if(k == 1)
-                    i=new Intent(getApplicationContext(),NotificationActivity.class);
-                else
-                    i=new Intent(getApplicationContext(),TeachersListActivity.class);
-                startActivity(i);
+                attemptLogin();
+                sp = getSharedPreferences("preferences", MODE_PRIVATE);
+
+                for(int i=0;i<student.size();i++){
+                    if(student.get(i).email.equals(mEmailView.getText().toString()) && student.get(i).password.equals(mPasswordView.getText().toString())){
+                        Toast.makeText(getApplicationContext(),"Logedin",Toast.LENGTH_LONG).show();
+
+
+                        SharedPreferences sp=getSharedPreferences("Preferences",MODE_PRIVATE);
+
+                        SharedPreferences.Editor e=sp.edit();
+                        e.putString("userEmail",mEmailView.getText().toString());
+                        e.putString("userPassword",mPasswordView.getText().toString());
+                        e.putString("userName",student.get(i).name);
+                        e.putString("userRollNo",student.get(i).RollNo);
+                        e.putString("user","student");
+
+                        e.commit();
+                        statusFlag=true;
+                        Intent inn;
+                            inn=new Intent(getApplicationContext(),TeachersListActivity.class);
+                        startActivity(inn);
+                    }
+                }
+                if(statusFlag==false)
+                {
+                    for(int i=0;i<teachers.size();i++){
+                        Log.e("data",teachers.get(i).email);
+                        Log.e("data",teachers.get(i).password);
+
+                        if(teachers.get(i).email.trim().equals(mEmailView.getText().toString()) && teachers.get(i).password.trim().equals(mPasswordView.getText().toString())){
+                            Toast.makeText(getApplicationContext(),"Loged in",Toast.LENGTH_SHORT).show();
+                            SharedPreferences sp=getSharedPreferences("Preferences",MODE_PRIVATE);
+                            SharedPreferences.Editor e=sp.edit();
+                            e.putString("userEmail",mEmailView.getText().toString());
+                            e.putString("userPassword",mPasswordView.getText().toString());
+                            e.putString("userEducation",teachers.get(i).education);
+                            e.putBoolean("userAvailable",true);
+                            e.putString("userPost",teachers.get(i).post);
+                            e.putString("userId",teachers.get(i).id);
+                            e.putString("userlocation",teachers.get(i).location);
+                            e.putString("userName",teachers.get(i).name);
+                            e.putString("user","teacher");
+                            e.commit();
+                            statusFlag=true;
+                            Intent inn;
+                            inn=new Intent(getApplicationContext(),NotificationActivity.class);
+                            startActivity(inn);
+                        }
+                    }
+                }
+                if(statusFlag==false)
+                    Toast.makeText(getApplicationContext(),"Email or Password is incorrect",Toast.LENGTH_SHORT);
+
+//                if(sp.contains("user"))
+//                {
+                //Toast.makeText(getApplication(), sp.getString("user", ""), Toast.LENGTH_SHORT).show();
+
+//                if (sp.getString("user", "").equals("student")) {
+//                    new UserLoginTask(mEmailView.getText().toString(), mPasswordView.getText().toString()).execute();
+//                } else if (sp.getString("user", "teacher").equals("teacher")) {
+//                    new TeacherLoginTask(mEmailView.getText().toString(), mPasswordView.getText().toString()).execute();
+//                }
             }
+//                else
+//                {
+////                    Intent  in=new Intent(getApplicationContext(),activity_signup_menu.class);
+////                    startActivity(in);
+//                    Toast.makeText(getApplicationContext(), "Your have not signed Up", Toast.LENGTH_SHORT).show();
+//
+//                }
+
+
         });
 
         mLoginFormView = findViewById(R.id.login_form);
@@ -119,7 +192,7 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                    .setAction(android.R.string.ok, new OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
@@ -146,17 +219,7 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
     }
 
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
@@ -189,18 +252,25 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
+        }
+        else
+        {
+            return ;
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            //showProgress(true);
+            // mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
         }
     }
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        boolean flag=false;
+        flag=email.contains("@");
+        if(flag==true)
+            flag=email.contains(".");
+        return  flag;
     }
 
     private boolean isPasswordValid(String password) {
@@ -302,7 +372,8 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+    public class UserLoginTask extends AsyncTask<Void, Void, ArrayList<LogInBO>> {
 
         private final String mEmail;
         private final String mPassword;
@@ -313,39 +384,69 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+        protected ArrayList<LogInBO> doInBackground(Void... params) {
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+                //Thread.sleep(2000);
+                getLoginData g = new getLoginData();
+                return g.getDatafromApiStudent();
+
+            } catch (Exception e) {
+                return null;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
             // TODO: register the new account here.
-            return true;
+            //   return true;
+
+
         }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
+        // @Override
+        protected void onPostExecute(ArrayList<LogInBO> response) {
+
             mAuthTask = null;
             showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+       //     Log.i("response", response.toString());
+            if (response != null) {
+                student = response;
+//                for(int i=0;i<response.size();i++){
+//                    if(response.get(i).email.equals(mEmail) && response.get(i).password.equals(mPassword)){
+//                        Toast.makeText(getApplicationContext(),"Logedin",Toast.LENGTH_LONG).show();
+//
+//
+//                        SharedPreferences sp=getSharedPreferences("Preferences",MODE_PRIVATE);
+//
+//                        SharedPreferences.Editor e=sp.edit();
+//                        e.putString("userEmail",mEmail);
+//                        e.putString("userPassword",mPassword);
+//                        e.putString("userName",response.get(i).name);
+//                        e.putString("userRollNo",response.get(i).RollNo);
+//                        e.commit();
+//                        Intent inn;
+//                            inn=new Intent(getApplicationContext(),TeachersListActivity.class);
+//                        startActivity(inn);
+//                    }
+//                }
             }
+//            else{
+//                Toast.makeText(getApplicationContext(),"can't longed",Toast.LENGTH_LONG).show();
+//
+//            }
+            //   if (success) {
+            //       finish();
+            //   } else {
+            // mPasswordView.setError(getString(R.string.error_incorrect_password));
+            //   mPasswordView.requestFocus();
+            //  }
         }
 
         @Override
@@ -354,5 +455,94 @@ public class activity_login extends AppCompatActivity implements LoaderCallbacks
             showProgress(false);
         }
     }
-}
+
+
+    public class TeacherLoginTask extends AsyncTask<Void, Void, ArrayList<TeacherLogInBO>> {
+
+        private final String mEmail;
+        private final String mPassword;
+
+        TeacherLoginTask(String email, String password) {
+            mEmail = email;
+            mPassword = password;
+        }
+
+        @Override
+        protected ArrayList<TeacherLogInBO> doInBackground(Void... params) {
+
+            try {
+                // Simulate network access.
+                //Thread.sleep(2000);
+                return new getTeacherLoginData().getDatafromApiTeacher();
+
+            } catch (Exception e) {
+                return null;
+            }
+
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
+
+            // TODO: register the new account here.
+            //   return true;
+
+
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<TeacherLogInBO> response) {
+            Toast.makeText(getApplicationContext(), "here", Toast.LENGTH_SHORT).show();
+            //mAuthTask = null;
+            //showProgress(false);
+            Log.e("response-----", response.toString());
+            if (response != null) {
+                teachers = response;
+//                for(int i=0;i<response.size();i++){
+//                    Log.e("data",response.get(i).email);
+//                    Log.e("data",response.get(i).password);
+//
+//                    if(response.get(i).email.trim().equals(mEmail) && response.get(i).password.trim().equals(mPassword)){
+//                        Toast.makeText(getApplicationContext(),"Loged in",Toast.LENGTH_SHORT).show();
+//                        SharedPreferences sp=getSharedPreferences("Preferences",MODE_PRIVATE);
+//                        SharedPreferences.Editor e=sp.edit();
+//                        e.putString("userEmail",mEmail);
+//                        e.putString("userPassword",mPassword);
+//                        e.putString("userEducation",response.get(i).education);
+//                        e.putBoolean("userAvailable",true);
+//                        e.putString("userPost",response.get(i).post);
+//                        e.putString("userId",response.get(i).id);
+//                        e.putString("userlocation",response.get(i).location);
+//                        e.putString("userName",response.get(i).name);
+//                        e.commit();
+//                        Intent inn;
+//                        inn=new Intent(getApplicationContext(),NotificationActivity.class);
+//                        startActivity(inn);
+//                    }
+//                }
+//            }
+//            else{
+//                Toast.makeText(getApplicationContext(),"can't longed",Toast.LENGTH_LONG).show();
+//
+//            }
+                //   if (success) {
+                //       finish();
+                //   } else {
+                //mPasswordView.setError(getString(R.string.error_incorrect_password));
+                //  mPasswordView.requestFocus();
+                //  }
+            }
+        }
+
+            @Override
+            protected void onCancelled () {
+                mAuthTask = null;
+                showProgress(false);
+            }
+        }
+    }
+
 

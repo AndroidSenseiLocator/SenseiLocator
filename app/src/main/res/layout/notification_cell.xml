@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<ImageView
-    android:id="@+id/im1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_menu_gallery"
-    android:padding="@dimen/padding_im"
-    />
+    android:layout_height="match_parent"
+    android:id="@+id/rel_layout_notification_cell"
+    >
+    <ImageView
+        android:id="@+id/im1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/padding_im"
+        />
     <TextView
         android:id="@+id/tv_rollno"
         android:layout_width="wrap_content"
@@ -51,5 +53,5 @@
         android:layout_below="@id/tv_date"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
-        <!--/>android:paddingLeft="@dimen/padding_left_tv_time"-->
+    <!--/>android:paddingLeft="@dimen/padding_left_tv_time"-->
 </RelativeLayout>

@@ -13,11 +13,21 @@ public class activity_go extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_go);
 
-        Button b = (Button) findViewById(R.id.btn_go);
+        Button b = (Button) findViewById(R.id.btn_go2);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplicationContext(),activity_signup_menu.class);
+                startActivity(intent);
+            }
+        });
+        Button b1 = (Button) findViewById(R.id.btn_go1);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),activity_login.class);
+                intent.putExtra("key",1);
                 startActivity(intent);
             }
         });
